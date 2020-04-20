@@ -1,0 +1,256 @@
+# java-se DAY1-NOTE & HOMEWORK
+## 1.示例代码：显示"Hello Java!"
+输入：
+    "Hellow Java!"
+        class Hello {
+
+            public static void main(String[] args){
+                
+                System.out.println("Hello Java!");// 相当于c语言中printf("\n")
+            }
+        }
+运行：
+1.cd ~/Desktop/ //打开终端，进入桌面
+2.mkdir -p ~/projects//TENwh-se/hellowjava //在桌面创建一个名为hellowjava的文件夹
+3.mv hellow\ java.java ~/projects/TENwh-se/hellowjava/ //将保存在桌面的代码文件移动到hellowjava文件夹
+4.cd ~/projects/TENwh-se/hellowjava/ //进入hellowjava文件夹
+5.ls //查看hellowjava文件夹，文件夹下有两个文件：Hello.class		hellow java.java
+6.cat hellow\ java.java //查看hellow java.java
+7.javac hellow\ java.java //先进行对hellow java.java的编译使用命令：javac 生成字节码文件
+8.java Hello //运行代码（注1：须先进行对ellow\ java.java的编译才能运行代码）（注2:代码中class类定义后为Hello
+在运行时也需要同步类定义的Hello)
+
+## 2.将编译生成的Hello.class文件删除，编辑Hello.java将class后面的名称修改为test，然后编译Hello.java文件
+   生成的class文件名是什么
+   请尝试使用java运行编译后的文件，应该输入什么命令
+使用public后生成的class文件必须与编辑的代码相一致
+不使用public后生成的class文件不区分大小写，由于跨平台，windows系统文件不区分大小写。linux系统区分大小写
+
+## 练习
+
+### 1
+    class sevendays {
+        public static void main(String args[]) {
+            int sevendays; 
+            
+            sevendays = 7 * 24 * 60 * 60 * 1000;
+                System.out.println(sevendays); 
+            }
+    }
+
+### 2
+    class thirty {
+        public static void main(String args[]) {
+            int thirty; 
+            
+            sevendays = 30 * 24 * 60 * 60 * 1000L;
+                System.out.println(thirty); 
+            }
+    }
+
+### 3
+    public class decimal {
+        public static void main(String args[]) {
+            float decimal;
+            double decimal2;
+            decimal = 1.2;
+            decimal2 = 1.2;
+
+
+            System.out.println(decimal);
+            System.out.println(decimal2);
+        }
+    }
+    //错误: 不兼容的类型: 从double转换到float可能会有损失decimal = 1.2;
+
+### 4
+
+
+
+### 5
+    class Demo1 {
+        public static void main(String[] args) {
+            String s[][]=new String[3][];
+            s[0]=new String[3];
+            s[1]=new String[5];
+            s[2]=new String[2];
+            s[0][0]="你";
+            s[0][1]="我";
+            s[0][2]="他";
+            s[1][0]="金";
+            s[1][1]="木";
+            s[1][2]="水";
+            s[1][3]="火";
+            s[1][4]="土";
+            s[2][0]="天";
+            s[2][1]="地";
+            for(int i=0;i<s.length;i++) {
+                System.out.print("{");
+                for(int j=0;j<s[i].length;j++) {
+                    System.out.print(s[i][j]+" ");
+                }
+                System.out.print("}");
+                System.out.println();
+            }
+        }
+
+    }
+
+### 5
+    class Cal {
+
+        /*
+        * 显示菜单的选项，使用数组，同时使用数组的长度来判断用户的输出是否合法
+        * 用户输入的数字不能大于数组的长度
+        */
+        static String[] ROOT_MENU = {"要进行哪种运算？\n", "1.加法\n", "2.减法\n", "3.乘法\n", "4.除法\n", "5.退出\n", "6.取模\n"};
+
+        static int ROOT_MENU_LEN = ROOT_MENU.length;
+
+        // 流程状态枚举
+        enum FlowStatus {
+            ROOT, QUIT, OPT_ONE_INPUT, OPT_TWO_INPUT
+        }
+
+        // 计算类型枚举
+        enum CalculateType {
+            ADD, SUB, MUL, DIV, NONE ,BLA
+        }
+
+        public static void main(String[] args) {
+            // 记录第一个操作数
+            int calNumOne = 0;
+            // 记录第二个操作数
+            int calNumTwo = 0;
+            // 记录用户输入的菜单选项
+            int userInput = 0;
+            // 记录当前的流程状态，是显示菜单选项还是用户输入
+            FlowStatus flowStatus = FlowStatus.ROOT;
+            // 记录用户选择的计算类型
+            CalculateType calType = CalculateType.NONE;
+
+            while (flowStatus != FlowStatus.QUIT) {
+                switch (flowStatus) {
+                    case ROOT:
+                        displayRootMenu();
+                        userInput = scanInt();
+                        // 用户输入不合法
+                        if (userInput <= 0 || userInput > ROOT_MENU_LEN) {
+                            printf("不存在的选项！\n");
+                            // 用户输入的退出项，退出项是菜单数组中的最后一项
+                        } else if (userInput == ROOT_MENU_LEN - 1) {
+                            flowStatus = FlowStatus.QUIT;
+                        } else {
+                            calType = getCalType(userInput);
+                            flowStatus = FlowStatus.OPT_ONE_INPUT;
+                        }
+                        break;
+                    case OPT_ONE_INPUT:
+                        printf("请输入第一个操作数:");
+                        calNumOne = scanInt();
+                        flowStatus = FlowStatus.OPT_TWO_INPUT;
+                        break;
+                    case OPT_TWO_INPUT:
+                        printf("请输入第二个操作数:");
+                        calNumTwo = scanInt();
+                        calculate(calType, calNumOne, calNumTwo);
+                        flowStatus = FlowStatus.ROOT;
+                        break;
+                    case QUIT:
+                        return;
+                }
+            }
+        }
+
+        /**
+        * 重新封装了读取用户输入的函数
+        *
+        * @return
+        */
+        static public int scanInt() {
+            java.util.Scanner sc = new java.util.Scanner(System.in);
+            String input = sc.nextLine();
+            try {
+                return Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                printf("输入不合法，请重新输入\n");
+                return scanInt();
+            }
+        }
+
+        /**
+        * 重新封装了输出函数
+        *
+        * @param format
+        * @param args
+        */
+        static public void printf(String format, Object... args) {
+            System.out.printf(format, args);
+        }
+
+        static void displayRootMenu() {
+            for (int i = 0; i < ROOT_MENU_LEN; i++) {
+                printf("%s", ROOT_MENU[i]);
+            }
+            printf("请输入：");
+        }
+
+        /**
+        * 输出计算结果
+        *
+        * @param calType
+        * @param calNumOne
+        * @param calNumTwo
+        */
+        static void calculate(CalculateType calType, int calNumOne, int calNumTwo) {
+            switch (calType) {
+                case ADD:
+                    printf("%d + %d = %d\n", calNumOne, calNumTwo, calNumOne + calNumTwo);
+                    break;
+                case SUB:
+                    printf("%d - %d = %d\n", calNumOne, calNumTwo, calNumOne - calNumTwo);
+                    break;
+                case MUL:
+                    printf("%d * %d = %d\n", calNumOne, calNumTwo, calNumOne * calNumTwo);
+                    break;
+                case DIV:
+                    printf("%d / %d = %.2f\n", calNumOne, calNumTwo, (calNumOne * 1.0) / calNumTwo);
+                    break;
+                case BLA:
+                    if(calNumTwo == 0){
+                        printf("输入不合法，请重新输入\n")；
+
+                        
+                    }
+                    else {
+                    printf("%d %% %d = %d\n", calNumOne, calNumTwo, calNumOne  % calNumTwo);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        /**
+        * 根据用户输入返回计算的类型
+        *
+        * @param userInput
+        * @return
+        */
+        static CalculateType getCalType(int userInput) {
+            switch (userInput) {
+                case 1:
+                    return CalculateType.ADD;
+                case 2:
+                    return CalculateType.SUB;
+                case 3:
+                    return CalculateType.MUL;
+                case 4:
+                    return CalculateType.DIV;
+                case 5:
+                    return CalculateType.BLA;
+                default:
+                    return CalculateType.NONE;
+            }
+        }
+    }
