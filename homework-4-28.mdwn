@@ -30,344 +30,346 @@
 输出值为“1，2，3”
 
 # 4
-class A
-{
-    public A()
+    class A
     {
-        System.out.println("Class A Constructor");
-    }   //打印“Class A Constructo”
-}
- 
-class B extends A
-{
-    public B()
-    {
-        System.out.println("Class B Constructor");
-    }   //类B继承类A,打印“Class B Constructor”
-}
- 
-class C extends B
-{
-    public C()
-    {
-        System.out.println("Class C Constructor");
-    }   //类C继承类A，打印“Class C Constructor”
-}
- 
-public class MainClass
-{
-    public static void main(String[] args)
-    {
-        C c = new C();
+        public A()
+        {
+            System.out.println("Class A Constructor");
+        }   //打印“Class A Constructo”
     }
-}
-最终打印：Class A Constructor
-        Class B Constructor
-        Class C Constructor
+    
+    class B extends A
+    {
+        public B()
+        {
+            System.out.println("Class B Constructor");
+        }   //类B继承类A,打印“Class B Constructor”
+    }
+    
+    class C extends B
+    {
+        public C()
+        {
+            System.out.println("Class C Constructor");
+        }   //类C继承类A，打印“Class C Constructor”
+    }
+    
+    public class MainClass
+    {
+        public static void main(String[] args)
+        {
+            C c = new C();
+        }
+    }
+最终打印：
+Class A Constructor
+Class B Constructor
+Class C Constructor
 
 # 5
-class X
-{
-    public X(int i)
+    class X
     {
-        System.out.println(1);
+        public X(int i)
+        {
+            System.out.println(1);
+        }
     }
-}
- 
-class Y extends X
-{
-    public Y()
+    
+    class Y extends X
     {
-        System.out.println(2);
+        public Y()
+        {
+            System.out.println(2);
+        }
     }
-}
-//编译报错，父类构造方法中没有无参的构造方法，子类在继承时需要手动指定调用父类的构造方法，使用super
+编译报错，父类构造方法中没有无参的构造方法，子类在继承时需要手动指定调用父类的构造方法，使用super
 
 # 6
-public class A
-{
-    public A()
+    public class A
     {
-        System.out.println(1);
- 
-        super();//对super的调用必须是构造器中的第一个语句
- 
-        System.out.println(2);
+        public A()
+        {
+            System.out.println(1);
+    
+            super();//对super的调用必须是构造器中的第一个语句
+    
+            System.out.println(2);
+        }
     }
-}
 编译报错，对super的调用必须是构造器中的第一个语句
 
 # 7
-public class A
-{
-    public A(int i)
+    public class A
     {
- 
+        public A(int i)
+        {
+    
+        }
     }
-}
- 
-class B extends A
-{
- 
-}
+    
+    class B extends A
+    {
+    
+    }
+//编译报错，不写表示使用无参数的构造方法，而父类中没有无参数的构造方法
 
 # 8
-public class A
-{
-    public A()
+    public class A
     {
-        super();
- 
-        this(10);
+        public A()
+        {
+            super();
+    
+            this(10);
+        }
+    
+        public A(int i)
+        {
+            System.out.println(i);
+        }
     }
- 
-    public A(int i)
-    {
-        System.out.println(i);
-    }
-}
-//super和this都必须是构造器的第一个语句，一起使用会冲突
+super和this都必须是构造器的第一个语句，一起使用会冲突
 
 # 9
-class M
-{
-    int i;
- 
-    public M(int i)
+    class M
     {
-        this.i = i--;
+        int i;
+    
+        public M(int i)
+        {
+            this.i = i--;
+        }
     }
-}
- 
-class N extends M
-{
-    public N(int i)
+    
+    class N extends M
     {
-        super(++i);
- 
-        System.out.println(i);
+        public N(int i)
+        {
+            super(++i);
+    
+            System.out.println(i);
+        }
     }
-}
- 
-public class MainClass
-{
-    public static void main(String[] args)
+    
+    public class MainClass
     {
-        N n = new N(26);
+        public static void main(String[] args)
+        {
+            N n = new N(26);
+        }
     }
-}
 输出的值为：27，此时传入N的值为26，子类中N的值为27
 
 # 10
-class M
-{
-    int i = 51;
- 
-    public M(int j)
+    class M
     {
-        System.out.println(i);
- 
-        this.i = j * 10;
+        int i = 51;
+    
+        public M(int j)
+        {
+            System.out.println(i);
+    
+            this.i = j * 10;
+        }
     }
-}
- 
-class N extends M
-{
-    public N(int j)
+    
+    class N extends M
     {
-        super(j);
- 
-        System.out.println(i);
- 
-        this.i = j * 20;
+        public N(int j)
+        {
+            super(j);
+    
+            System.out.println(i);
+    
+            this.i = j * 20;
+        }
     }
-}
- 
-public class MainClass
-{
-    public static void main(String[] args)
+    
+    public class MainClass
     {
-        N n = new N(26);
- 
-        System.out.println(n.i);
+        public static void main(String[] args)
+        {
+            N n = new N(26);
+    
+            System.out.println(n.i);
+        }
     }
-}
 输出的值为：51，260，520
 
 # 11
-class X
-{
-    private int m = 48;
-}
- 
-class Y extends X
-{
-    void methodOfY()
+    class X
     {
-        System.out.println(m);
+        private int m = 48;
     }
-}
+    
+    class Y extends X
+    {
+        void methodOfY()
+        {
+            System.out.println(m);
+        }
+    }
 编译错误，访问修饰语句private只能在同一个类中才能调用
 
 
 # 12
-class X
-{
-    int m = 1111;
- 
+    class X
     {
-        m = m++;
- 
-        System.out.println(m);
+        int m = 1111;
+    
+        {
+            m = m++;
+    
+            System.out.println(m);
+        }
     }
-}
- 
-class Y extends X
-{
+    
+    class Y extends X
     {
-        System.out.println(methodOfY());
+        {
+            System.out.println(methodOfY());
+        }
+    
+        int methodOfY()
+        {
+            return m-- + --m;
+        }
     }
- 
-    int methodOfY()
+    
+    public class MainClass
     {
-        return m-- + --m;
+        public static void main(String[] args)
+        {
+            Y y = new Y();
+        }
     }
-}
- 
-public class MainClass
-{
-    public static void main(String[] args)
-    {
-        Y y = new Y();
-    }
-}
 输出值为：1111，2220
 
 # 13
-class A
-{
-	void A()
-	{
-		System.out.println(1);
-	}
-}
+    class A
+    {
+        void A()
+        {
+            System.out.println(1);
+        }
+    }
 
-class B extends A
-{
-	void B()
-	{
-		A();
-	}
-}
+    class B extends A
+    {
+        void B()
+        {
+            A();
+        }
+    }
 
-public class MainClass
-{
-	public static void main(String[] args)
-	{
-		new B().B();
-	}
-}
-//值为1.
+    public class MainClass
+    {
+        public static void main(String[] args)
+        {
+            new B().B();
+        }
+    }
+    //值为1.
 
-# 14
-class A
-{
-	int i = 1212;
-}
+    # 14
+    class A
+    {
+        int i = 1212;
+    }
 
-class B extends A
-{
-	A a;
+    class B extends A
+    {
+        A a;
 
-	public B(A a)
-	{
-		this.a = a;
-	}
-}
+        public B(A a)
+        {
+            this.a = a;
+        }
+    }
 
-public class MainClass
-{
-	public static void main(String[] args)
-	{
-		A a = new A();
+    public class MainClass
+    {
+        public static void main(String[] args)
+        {
+            A a = new A();
 
-		B b = new B(a);
+            B b = new B(a);
 
-		System.out.println(a.i);
+            System.out.println(a.i);
 
-		System.out.println(b.i);
+            System.out.println(b.i);
 
-		System.out.println(b.a.i);
+            System.out.println(b.a.i);
 
-		b.a.i = 2121;
+            b.a.i = 2121;
 
-		System.out.println("--------");
+            System.out.println("--------");
 
-		System.out.println(a.i);
+            System.out.println(a.i);
 
-		System.out.println(b.i);
-	}
-}
+            System.out.println(b.i);
+        }
+    }
 输出值为：
-1212
-1212
-1212
---------
-2121
-1212
+    1212
+    1212
+    1212
+    --------
+    2121
+    1212
 
 # 15
-class A
-{
-	int methodOfA(int i)
-	{
-		i /= 10;
+    class A
+    {
+        int methodOfA(int i)
+        {
+            i /= 10;
 
-		return i;
-	}
-}
+            return i;
+        }
+    }
 
-class B extends A
-{
-	int methodOfB(int i)
-	{
-		i *= 20;
+    class B extends A
+    {
+        int methodOfB(int i)
+        {
+            i *= 20;
 
-		return methodOfA(i);
-	}
-}
+            return methodOfA(i);
+        }
+    }
 
-public class MainClass
-{
-	public static void main(String[] args)
-	{
-		B b = new B();
+    public class MainClass
+    {
+        public static void main(String[] args)
+        {
+            B b = new B();
 
-		System.out.println(b.methodOfB(100));
-	}
-}
+            System.out.println(b.methodOfB(100));
+        }
+    }
 //输出值为：200
 
 # 16
-class One
-{
-	int x = 2121;
-}
+    class One
+    {
+        int x = 2121;
+    }
 
-class Two
-{
-	int x = 1212;
-	
-	{
-		System.out.println(x);
-	}
-}
+    class Two
+    {
+        int x = 1212;
+        
+        {
+            System.out.println(x);
+        }
+    }
 
-public class MainClass
-{
-	public static void main(String[] args)
-	{
-		Two two = new Two();
-	}
-}
+    public class MainClass
+    {
+        public static void main(String[] args)
+        {
+            Two two = new Two();
+        }
+    }
 //输出值为：1212
