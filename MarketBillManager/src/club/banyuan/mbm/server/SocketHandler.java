@@ -1,22 +1,26 @@
 package club.banyuan.mbm.server;
 
+import club.banyuan.mbm.entity.Suplier;
 import club.banyuan.mbm.entity.User;
 import club.banyuan.mbm.exception.BadRequestException;
 import club.banyuan.mbm.exception.FormPostException;
+import club.banyuan.mbm.service.SuplierService;
 import club.banyuan.mbm.service.UserService;
 import com.alibaba.fastjson.JSONObject;
 
 import java.io.*;
 import java.net.Socket;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
 public class SocketHandler extends Thread {
 
-  private Socket clientSocket;
-  private UserService userService = new UserService();
+  private final Socket clientSocket;
+  private final UserService userService = new UserService();
+  private final SuplierService suplierService = new SuplierService();
 
   public SocketHandler(Socket clientSocket) {
     this.clientSocket = clientSocket;
@@ -46,7 +50,7 @@ public class SocketHandler extends Thread {
       StringTokenizer tokenizer = new StringTokenizer(line);
 
       mbmRequest.setMethod(tokenizer.nextToken());
-      mbmRequest.setPath(URLDecoder.decode(tokenizer.nextToken(), "utf-8"));
+      mbmRequest.setPath(URLDecoder.decode(tokenizer.nextToken(), StandardCharsets.UTF_8));
 
       // 循环读取请求头的信息，按照一行一行的方式读取，读取到空行则退出循环
       while (line != null && line.length() != 0) {
@@ -65,7 +69,7 @@ public class SocketHandler extends Thread {
         char[] chars = new char[mbmRequest.getContentLength()];
         bufferedReader.read(chars);
 
-        mbmRequest.setPayload(URLDecoder.decode(new String(chars), "utf-8"));
+        mbmRequest.setPayload(URLDecoder.decode(new String(chars), StandardCharsets.UTF_8));
         // 断言
         // assert read == mbmRequest.getContentLength();
       }
@@ -165,6 +169,47 @@ public class SocketHandler extends Thread {
         String payload = mbmRequest.getPayload();
         User userId = JSONObject.parseObject(payload, User.class);
         userService.deleteUserById(userId.getId());
+        responseOk();
+      }
+      break;
+      case"/server/provider/list": {
+        List<Suplier> suplierList;
+        String payload = mbmRequest.getPayload();
+        if(payload == null) {
+          suplierList = suplierService.getSuplierList();
+        } else {
+          Suplier suplier = JSONObject.parseObject(payload, Suplier.class);
+          suplierList = suplierService.getSuplierList(suplier);
+        }
+        responseJson(suplierList);
+      }
+      break;
+      case "/server/provider/modify": {
+        Map<String, String> formData = mbmRequest.getFormData();
+        String data = JSONObject.toJSONString(formData);
+        Suplier suplier = JSONObject.parseObject(data,Suplier.class);
+        System.out.println("modify: " + suplier);
+        if(suplier.getId() == 0) {
+          suplierService.addSuplier(suplier);
+        } else {
+          suplierService.updateSuplier(suplier);
+        }
+        responseRedirect(mbmRequest,"/provider_list.html");
+      }
+      break;
+      case "/server/provider/get": {
+        String payload = mbmRequest.getPayload();
+        System.out.println("/server/provider/get");
+        System.out.println(payload);
+        Suplier suplierId = JSONObject.parseObject(payload, Suplier.class);
+        Suplier suplier = suplierService.getSuplierById(suplierId.getId());
+        responseJson(suplier);
+      }
+      break;
+      case "/server/provider/delete": {
+        String payload = mbmRequest.getPayload();
+        Suplier suplierId = JSONObject.parseObject(payload, Suplier.class);
+        suplierService.deleteSuplierById(suplierId.getId());
         responseOk();
       }
       break;
