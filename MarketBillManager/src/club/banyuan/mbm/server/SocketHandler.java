@@ -1,9 +1,11 @@
 package club.banyuan.mbm.server;
 
+import club.banyuan.mbm.entity.Bill;
 import club.banyuan.mbm.entity.Suplier;
 import club.banyuan.mbm.entity.User;
 import club.banyuan.mbm.exception.BadRequestException;
 import club.banyuan.mbm.exception.FormPostException;
+import club.banyuan.mbm.service.BillService;
 import club.banyuan.mbm.service.SuplierService;
 import club.banyuan.mbm.service.UserService;
 import com.alibaba.fastjson.JSONObject;
@@ -21,6 +23,7 @@ public class SocketHandler extends Thread {
   private final Socket clientSocket;
   private final UserService userService = new UserService();
   private final SuplierService suplierService = new SuplierService();
+  private final BillService billService = new BillService();
 
   public SocketHandler(Socket clientSocket) {
     this.clientSocket = clientSocket;
@@ -213,6 +216,48 @@ public class SocketHandler extends Thread {
         responseOk();
       }
       break;
+      case "/server/bill/modify": {
+        Map<String, String> formData = mbmRequest.getFormData();
+        String data = JSONObject.toJSONString(formData);
+        Bill bill = JSONObject.parseObject(data,Bill.class);
+        System.out.println("modify: " + bill);
+        if (bill.getId() == 0) {
+          billService.addBill(bill);
+        }else {
+          billService.updateBill(bill);
+        }
+        responseRedirect(mbmRequest,"bill_list.html");
+      }
+      break;
+      case "/server/bill/list": {
+        List<Bill> billList;
+        String payload = mbmRequest.getPayload();
+        if(payload == null) {
+          billList = billService.getBillList();
+        }else {
+          Bill bill = JSONObject.parseObject(payload, Bill.class);
+          billList = billService.getBillList(bill);
+        }
+        responseJson(billList);
+      }
+      break;
+      case "/server/bill/get": {
+        String payload = mbmRequest.getPayload();
+        System.out.println("/server/bill/get");
+        System.out.println(payload);
+        Bill billId = JSONObject.parseObject(payload, Bill.class);
+        Bill bill = BillService.getBillById(billId.getId());
+        responseJson(bill);
+      }
+      break;
+      case "/server/bill/delete": {
+        String payload = mbmRequest.getPayload();
+        Bill billId = JSONObject.parseObject(payload, Bill.class);
+        BillService.deleteBillById(billId.getId());
+        responseOk();
+      }
+      break;
+      default:
     }
   }
 

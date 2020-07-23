@@ -5,7 +5,34 @@ public class Bill {
     private int providerId;
     private int money;
     private String product;
-    private boolean isPay;
+    private int isPay;
+    private String upDateTime;
+    private String providerName;
+    private String isPayStr;
+
+    public String getIsPayStr() {
+        return isPayStr;
+    }
+
+    public void setIsPayStr(String isPayStr) {
+        this.isPayStr = isPayStr;
+    }
+
+    public String getProviderName() {
+        return providerName;
+    }
+
+    public void setProviderName(String providerName) {
+        this.providerName = providerName;
+    }
+
+    public String getUpDateTime() {
+        return upDateTime;
+    }
+
+    public void setUpDateTime(String upDateTime) {
+        this.upDateTime = upDateTime;
+    }
 
     public int getId() {
         return id;
@@ -40,11 +67,12 @@ public class Bill {
         this.product = product;
     }
 
-    public boolean isPay() {
+    public int getIsPay() {
         return isPay;
     }
 
-    public void setPay(boolean pay) {
-        isPay = pay;
+    public void setIsPay(int isPay) {
+        this.isPay = isPay;
     }
+
 }
